@@ -85,6 +85,9 @@ def add_movies(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_user_movies(request):
+    """
+    Lists all the movies in the user's 
+    """
     current_user = request.user
     movies = Movies.objects.filter(user_id=current_user.id)
     MovieData = MovieSerializer(movies, many=True).data
@@ -104,6 +107,15 @@ def edit_user_rating(request):
     
     serializer = MovieSerializer(query)
     return JsonResponse({"data": serializer.data}, status=status.HTTP_200_OK)  
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_movie(request):
+    query = Movies.objects.filter(movie_id = request.data['id'])
+    query.delete()
+    serializer = MovieSerializer(query)
+    return JsonResponse({'message':'movie has been deleted'}, status = status.HTTP_200_OK)
 
 
 
