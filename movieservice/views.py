@@ -95,18 +95,7 @@ def list_user_movies(request):
     for movie in MovieData:
         movies.append(movie)
     return JsonResponse({"data": movies}, status=status.HTTP_200_OK)
-
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def edit_user_rating(request):
-    query = Movies.objects.filter(movie_id=request.data['movie_id'])
-    current_user = request.user
-    query.user_rating = request.data["user_rating"]
-    query.user_id = current_user.id
-    query.update()
-    
-    serializer = MovieSerializer(query)
-    return JsonResponse({"data": serializer.data}, status=status.HTTP_200_OK)  
+ 
 
 
 @api_view(['DELETE'])
